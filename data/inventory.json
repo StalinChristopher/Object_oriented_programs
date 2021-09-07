@@ -1,0 +1,34 @@
+{
+    "inventory" : [
+        {
+            "type" : "rice",
+            "name" : "basmati",
+            "weight" :  20.0,
+            "pricePerKg" : 65.5
+        },
+        {
+            "type" : "rice",
+            "name" : "boiled",
+            "weight" : 25.0,
+            "pricePerKg" : 40.0
+        },
+        {
+            "type" : "pulses",
+            "name" : "green",
+            "weight" : 10.0,
+            "pricePerKg" : 70.0
+        },
+        {
+            "type" : "wheat",
+            "name" : "standard",
+            "weight" : 30.0,
+            "pricePerKg" : 50.0
+        },
+        {
+            "type" : "wheat",
+            "name" : "premium",
+            "weight" : 25.0,
+            "pricePerKg" : 60.0
+        }
+    ]
+}
