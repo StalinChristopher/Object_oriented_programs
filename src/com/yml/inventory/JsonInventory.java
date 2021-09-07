@@ -12,7 +12,7 @@ import org.json.simple.parser.*;
 
 public class JsonInventory {
 
-	public static void main(String[] args) {
+	public static void jsonInventory() {
 		JSONParser jsonParser  = new JSONParser();
 		Map<String, Double> map = new HashMap<String,Double>();
 		try {
