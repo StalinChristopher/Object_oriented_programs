@@ -1,69 +1,53 @@
 package com.yml.inventorymanagementsystem;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
-
-import org.json.simple.*;
-import org.json.simple.parser.*;
+import java.util.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 public class InventoryManager {
-	public static void inventoryManager() {
-		Map<String, Double> map = new HashMap<String,Double>();
-		List<JSONObject> objectList = inventoryFactory();
-		for(JSONObject object : objectList) {
-			String name = (String) object.get("name");
-			String type = (String) object.get("type");
-			double weight = (double) object.get("weight");
-			double pricePerKg = (double) object.get("pricePerKg");
-			double totalPrice = weight * pricePerKg; 
-			System.out.println("\nName : "+name);
-			System.out.println("Type : "+type);
-			System.out.println("Weight : "+weight);
-			System.out.println("PricePerKg : "+pricePerKg);
-			System.out.println("Total price : "+totalPrice+"\n");
-			map.put(name, totalPrice);
-		}
-		JSONArray array = new JSONArray();
-		Set<Entry<String,Double>> set = map.entrySet();
-		
-		for(Entry<String,Double> entry : set) {
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("name",entry.getKey());
-			jsonObject.put("totalPrice", entry.getValue());
-			array.add(jsonObject);
-		}
-		JSONObject mainObject = new JSONObject();
-		mainObject.put("results", array);
-		System.out.println(mainObject.toJSONString());
-	}
+    public static void inventoryManager() {
+        InventoryFactory inventoryFactory = new InventoryFactory();
+        
+        //Fetching the list of inventory objects from InventoryFactory class
+        List<JSONArray> inventoryList = inventoryFactory.getInventories();  
+        
+        //List to store the each inventory with all the items and their respective price
+        List<JSONObject> allInventories = new ArrayList<JSONObject>();
+        
+        //Iterate through the inventory list and calculate total price for each item in an inventory
+        for (JSONArray inventory : inventoryList) {
+            //priceMap to hold all the items and their total price in a inventory
+            Map<String, Double> priceMap = new HashMap<String, Double>();
+            Iterator<JSONObject> iterator = inventory.iterator();
+            while (iterator.hasNext()) {
+                JSONObject item = (JSONObject) iterator.next();
+                String name = (String) item.get("name");
+                double weight = (double) item.get("weight");
+                double pricePerKG = (double) item.get("pricePerKG");
+                double totalPrice = weight * pricePerKG;
+                priceMap.put(name, totalPrice);
+            }
 
-	private static List<JSONObject> inventoryFactory() {
-		List<JSONObject> objList = new ArrayList<JSONObject>();
-		try {
-			Reader reader = new FileReader("data/inventory.json");
-			JSONParser jsonParser = new JSONParser();
-			JSONObject jsonObject = (JSONObject) jsonParser.parse(reader);
-			JSONArray array = (JSONArray) jsonObject.get("inventory");
-//			System.out.println(array);
-			Iterator<JSONObject> iterator = array.iterator();
-			while(iterator.hasNext()) {
-				JSONObject jsonObj2 = iterator.next();
-//				System.out.println(); 
-//				System.out.println(jsonObj2);
-				objList.add(jsonObj2);
-			}
-		}
-			catch (IOException | ParseException e) {
-			e.printStackTrace();
-		}
-		return objList;
-		
-		
-	}
+            //converting Map to JSON object and adding it to inventories list
+            JSONObject inventoryJSON = new JSONObject();
+            inventoryJSON.putAll(priceMap);
+            allInventories.add(inventoryJSON);
+        }
+        
+        //Traverse through all the inventories and calculate total cost of an inventory and display JSON string of items in it.
+        int inventoryNumber = 1;
+        for (JSONObject inventory : allInventories) {
+            System.out.println("\nInventory "+inventoryNumber);
+            System.out.println("--------------");
+            double sum = 0;
+            for (Object item : inventory.keySet()) {
+                sum += (double) inventory.get(item);
+            }
+            System.out.println("Inventory Items:\n");
+            System.out.println(inventory.toJSONString());
+            System.out.println("\nTotal value of the inventory: " + sum);
+            System.out.println();
+            inventoryNumber++;
+        }
+    }
 }

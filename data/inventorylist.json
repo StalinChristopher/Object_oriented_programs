@@ -1,0 +1,156 @@
+{
+    "inventories": [
+      [
+        {
+          "type": "rice",
+          "name": "Basmati Rice",
+          "weight": 15.0,
+          "pricePerKG": 200.0
+        },
+        {
+          "type": "rice",
+          "name": "Bamboo",
+          "weight": 4.0,
+          "pricePerKG": 140.0
+        },
+        {
+          "type": "pulses",
+          "name": "Toor",
+          "weight": 7.0,
+          "pricePerKG": 50.0
+        },
+        {
+          "type": "pulses",
+          "name": "Urad",
+          "weight": 6.25,
+          "pricePerKG": 70.0
+        },
+        {
+          "type": "wheat",
+          "name": "Standard Wheat",
+          "weight": 4.0,
+          "pricePerKG": 80.0
+        },
+        {
+          "type": "wheat",
+          "name": "Premium Wheat",
+          "weight": 3.0,
+          "pricePerKG": 120.0
+        }
+      ],
+      [
+        {
+          "type": "rice",
+          "name": "Basmati Rice",
+          "weight": 8.0,
+          "pricePerKG": 200.0
+        },
+        {
+          "type": "rice",
+          "name": "Bamboo",
+          "weight": 6.0,
+          "pricePerKG": 140.0
+        },
+        {
+          "type": "pulses",
+          "name": "Toor",
+          "weight": 2.0,
+          "pricePerKG": 50.0
+        },
+        {
+          "type": "pulses",
+          "name": "Urad",
+          "weight": 8.25,
+          "pricePerKG": 70.0
+        },
+        {
+          "type": "wheat",
+          "name": "Standard Wheat",
+          "weight": 2.0,
+          "pricePerKG": 80.0
+        },
+        {
+          "type": "wheat",
+          "name": "Premium Wheat",
+          "weight": 5.0,
+          "pricePerKG": 120.0
+        }
+      ],
+      [
+        {
+          "type": "rice",
+          "name": "Basmati Rice",
+          "weight": 11.0,
+          "pricePerKG": 200.0
+        },
+        {
+          "type": "rice",
+          "name": "Bamboo",
+          "weight": 9.0,
+          "pricePerKG": 140.0
+        },
+        {
+          "type": "pulses",
+          "name": "Toor",
+          "weight": 3.0,
+          "pricePerKG": 50.0
+        },
+        {
+          "type": "pulses",
+          "name": "Urad",
+          "weight": 2.25,
+          "pricePerKG": 70.0
+        },
+        {
+          "type": "wheat",
+          "name": "Standard Wheat",
+          "weight": 6.0,
+          "pricePerKG": 80.0
+        },
+        {
+          "type": "wheat",
+          "name": "Premium Wheat",
+          "weight": 7.0,
+          "pricePerKG": 120.0
+        }
+      ],
+      [
+        {
+          "type": "rice",
+          "name": "Basmati Rice",
+          "weight": 13.0,
+          "pricePerKG": 200.0
+        },
+        {
+          "type": "rice",
+          "name": "Bamboo",
+          "weight": 5.0,
+          "pricePerKG": 140.0
+        },
+        {
+          "type": "pulses",
+          "name": "Toor",
+          "weight": 4.0,
+          "pricePerKG": 50.0
+        },
+        {
+          "type": "pulses",
+          "name": "Urad",
+          "weight": 9.25,
+          "pricePerKG": 70.0
+        },
+        {
+          "type": "wheat",
+          "name": "Standard Wheat",
+          "weight": 5.0,
+          "pricePerKG": 80.0
+        },
+        {
+          "type": "wheat",
+          "name": "Premium Wheat",
+          "weight": 2.0,
+          "pricePerKG": 120.0
+        }
+      ]
+    ]
+  }
