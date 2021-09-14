@@ -1,5 +1,10 @@
 package com.yml.stockaccount;
 
+/**
+ * @author Stalin Christopher
+ * class to create a template of the transaction that take place during buying or selling of stocks of a company
+ *
+ */
 public class Transaction {
     private String dateTime;
     private long numberOfShares;
