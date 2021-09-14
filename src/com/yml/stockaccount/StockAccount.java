@@ -6,15 +6,39 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import java.io.*;
 
+/**
+ * @author Stalin Christopher
+ * This class maintains the stock account of the user. Here buy, sell, save and print methods are written for the stocks
+ *
+ */
 public class StockAccount implements StockAccountInterface {
+	private final String STOCKS_FILE = "data/stocks.json";
 	private String fileName;
     private JSONArray stocksData;
     List<CompanyShares> companyShares = new ArrayList<CompanyShares>();
-
+    
     StockAccount(String fileName) {
         this.fileName = fileName;
     }
+    
+    
+    /**
+     * Getter and setter methods for CompanyShares list
+     */
+    public List<CompanyShares> getCompanyShares() {
+		return companyShares;
+	}
 
+	public void setCompanyShares(List<CompanyShares> companyShares) {
+		this.companyShares = companyShares;
+	}
+
+    
+
+    /**
+     * Method to restore all the data from a file
+     * that has been written to storage by save() method
+     */
     public void readFileContents(){
         try {
             List<CompanyShares> companySharesList = new ArrayList<CompanyShares>();
@@ -47,11 +71,16 @@ public class StockAccount implements StockAccountInterface {
                 companySharesList.add(companyShare);
             }
             this.companyShares = companySharesList;
+            System.out.println("Data restored from file");
         } catch (Exception e) {
+        	System.out.println("Data restored from file");
             e.printStackTrace();
         }
     }
 
+    /**
+     *Method to calculate total value of the all the stocks combined in the account
+     */
     @Override
     public double valueOf() {
     	readJSONFile();
@@ -76,12 +105,13 @@ public class StockAccount implements StockAccountInterface {
         return sharePrice * companyShare.getNumberOfShares();
     }
 
+    /**
+     * Method to buy stocks from stocks.json file
+     */
     @Override
     public void buy(int amount, String symbol) {
         readJSONFile();
         Iterator<JSONObject> iterator = stocksData.iterator();
-        PrintWriter out = new PrintWriter(System.out,true);
-
         long numberOfShares = 0;
         while (iterator.hasNext()) {
             JSONObject stock = iterator.next();
@@ -91,7 +121,7 @@ public class StockAccount implements StockAccountInterface {
         }
 
         if (amount > numberOfShares) {
-            out.println("Insufficient Shares Available");
+            System.out.println("No sufficient shares available to buy");
         }
         else {
             CompanyShares newCompanyShare = null;
@@ -105,13 +135,20 @@ public class StockAccount implements StockAccountInterface {
             if (newCompanyShare == null) {
                 newCompanyShare = new CompanyShares(symbol);
             }
-
-            
             updateValue(symbol, amount, newCompanyShare ,Transaction.BUY);
         }
         
     }
 
+    /**
+     * @param symbol
+     * @param numberOfShares
+     * @param companyShare
+     * @param state
+     * Helper method to create/update companyShare object in companyShares List
+     * and also update stocks.json file
+     * during buy/sell situations
+     */
     private void updateValue(String symbol, long numberOfShares, CompanyShares companyShare, String state) {
         //Add transaction to CompanyShare Object
     	readJSONFile();
@@ -148,7 +185,7 @@ public class StockAccount implements StockAccountInterface {
         }
 
         try {
-            FileWriter writer = new FileWriter("data/stocks.json");
+            FileWriter writer = new FileWriter(STOCKS_FILE);
             JSONObject result = new JSONObject();
             result.put("stocks", stocksData);
             writer.write(result.toJSONString());
@@ -158,12 +195,21 @@ public class StockAccount implements StockAccountInterface {
             e.printStackTrace();
         }
         
+        if (state == Transaction.BUY) {
+            System.out.println("Buy Successfull");
+        }
+        else {
+            System.out.println("Sell Successfull");
+        }
+        
     }
 
+    /**
+     *Method to Sell a stocks present in the account 
+     */
     @Override
     public void sell(int amount, String symbol) {
     	readJSONFile();
-        PrintWriter out = new PrintWriter(System.out);
         long numberOfShares = 0;
 
         for (CompanyShares companyShare : companyShares) {
@@ -173,7 +219,7 @@ public class StockAccount implements StockAccountInterface {
         }
 
         if (numberOfShares == 0 || amount > numberOfShares) {
-            out.println("Insufficient Shares available");
+            System.out.println("No sufficient shares are available to sell");
         }
         else {
             CompanyShares selectedShare = null;
@@ -191,6 +237,9 @@ public class StockAccount implements StockAccountInterface {
         }
     }
 
+    /**
+     * Method to save the current status of account into a file in a given path
+     */
     @Override
     public void save(String filename) {
         JSONArray compShares = new JSONArray();
@@ -225,25 +274,34 @@ public class StockAccount implements StockAccountInterface {
        }       
     }
 
+    /**
+     * method to print the stockReport in the console
+     */
     @Override
     public void printReport() {
-    	PrintWriter out = new PrintWriter(System.out, true);
-        out.println("Stock Report");
-        out.println("Holding Shares\n");
+        System.out.println("Stock Report");
+        System.out.println("Holding Shares\n");
         for (CompanyShares companyShare : companyShares) {
-            out.println("Share Symbol : " + companyShare.getStockSymbol());
-            out.println("Number of Shares : " + companyShare.getNumberOfShares());
-            out.println("Value of each share : " + valueof(companyShare)/companyShare.getNumberOfShares());
-            out.println("Total Share Value : " + valueof(companyShare));
-            out.println();
+        	double valueEach = 0;
+            if (companyShare.getNumberOfShares() != 0) {
+                valueEach = valueof(companyShare) / companyShare.getNumberOfShares();
+            }
+            System.out.println("Share Symbol : " + companyShare.getStockSymbol());
+            System.out.println("Number of Shares : " + companyShare.getNumberOfShares());
+            System.out.println("Value of each share : " + valueEach);
+            System.out.println("Total Share Value : " + valueof(companyShare));
+            System.out.println();
         }
-        out.println("Total Value of all the shares in the account: " + valueOf());
+        System.out.println("Total Value of all the shares in the account: " + valueOf());
         
     }
     
+    /**
+     * Method to reads stocks.json file and sets the stocksData class variable used by other methods
+     */
     private void readJSONFile(){
         try{
-            FileReader reader = new FileReader("data/stocks.json");
+            FileReader reader = new FileReader(STOCKS_FILE);
             JSONParser parser = new JSONParser();
             JSONObject obj = (JSONObject) parser.parse(reader);
             stocksData = (JSONArray) obj.get("stocks");
