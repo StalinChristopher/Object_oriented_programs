@@ -1,9 +1,10 @@
 package com.yml.stockaccount;
+
 import com.yml.linkedlist.Node;
 import com.yml.linkedlist.LinkedList;
 import com.yml.stack.*;
 import com.yml.stack.Stack;
-
+import com.yml.queue.Queue;
 import java.util.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -22,7 +23,7 @@ public class StockAccount implements StockAccountInterface {
 	private JSONArray stocksData;
 	private LinkedList<CompanyShares> companyShares = new LinkedList<CompanyShares>();
 	Stack<JSONObject> transactionStack = new Stack<JSONObject>();
-
+	Queue<String> dateTimeQueue = new Queue<String>();
 	StockAccount(String fileName) {
 		this.fileName = fileName;
 	}
@@ -52,8 +53,9 @@ public class StockAccount implements StockAccountInterface {
 			JSONArray transStack = (JSONArray) obj.get("transactionStack");
 			Iterator<JSONObject> iterator = companyShares.iterator();
 			if (companyShares == null) {
-                return;
-            }
+				return;
+			}
+			JSONArray dateTimeQ = (JSONArray) obj.get("dateTimeQueue");
 			while (iterator.hasNext()) {
 				CompanyShares companyShare = new CompanyShares();
 				JSONObject compShare = iterator.next();
@@ -76,12 +78,17 @@ public class StockAccount implements StockAccountInterface {
 				companyShare.setTransactions(transactionList);
 				companySharesList.add(companyShare);
 			}
-			
-			iterator = transStack.iterator();
-	        while (iterator.hasNext()) {
-	        	transactionStack.push(iterator.next());
-	        }
 			this.companyShares = companySharesList;
+			iterator = transStack.iterator();
+			while (iterator.hasNext()) {
+				transactionStack.push(iterator.next());
+			}
+			
+			Iterator<String> itr2 = dateTimeQ.iterator();
+            while (itr2.hasNext()) {
+                dateTimeQueue.enqueue(itr2.next());
+            }
+            
 			System.out.println("Data restored from file");
 		} catch (Exception e) {
 			System.out.println("Data restored from file");
@@ -173,9 +180,10 @@ public class StockAccount implements StockAccountInterface {
 		Date dateTime = new Date(millis);
 		Transaction transaction = new Transaction(dateTime.toString(), numberOfShares, state);
 		JSONObject transact = new JSONObject();
-        transact.put("symbol", symbol);
-        transact.put("state", state);
-        transactionStack.push(transact);
+		transact.put("symbol", symbol);
+		transact.put("state", state);
+		transactionStack.push(transact);
+		dateTimeQueue.enqueue(dateTime.toString());
 		companyShare.addTransaction(transaction);
 		companyShares.add(companyShare);
 
@@ -271,15 +279,21 @@ public class StockAccount implements StockAccountInterface {
 			obj.put("transactions", transactions);
 			compShares.add(obj);
 		}
-		
+
 		JSONArray transStack = new JSONArray();
-        for (Node<JSONObject> transact : transactionStack) {
-            transStack.add(transact.getData());
+		for (Node<JSONObject> transact : transactionStack) {
+			transStack.add(transact.getData());
+		}
+		
+		JSONArray dateQueue = new JSONArray();
+        for (Node<String> dateTime : dateTimeQueue) {
+            dateQueue.add(dateTime.getData());
         }
 
 		JSONObject finalJSON = new JSONObject();
 		finalJSON.put("companyShares", compShares);
 		finalJSON.put("transactionStack", transStack);
+		finalJSON.put("dateTimeQueue", dateQueue);
 
 		try {
 			FileWriter writer = new FileWriter(filename);
