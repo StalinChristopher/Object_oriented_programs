@@ -6,6 +6,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import com.yml.linkedlist.Node;
+
 /**
  * @author Stalin Christopher
  * Class to create a account object and maintain the user interface
@@ -17,6 +19,7 @@ public class StockAccountManagement {
 
     private static StockAccount account = new StockAccount(ACCOUNT_FILE);
 	public static void stockManagement() {
+		account.readFileContents();
 		System.out.println("Welcome to Stock Account program");
 		System.out.println("Choose an option:");
 		while(true) {
@@ -48,10 +51,10 @@ public class StockAccountManagement {
 
         System.out.println("Select the stock you want to Sell");
         int count = 1;
-        for (CompanyShares companyShare : account.getCompanyShares()) {
+        for (Node<CompanyShares> companyShare : account.getCompanyShares()) {
             System.out.println(count + ":");
-            System.out.println("Stock Symbol : " + companyShare.getStockSymbol());
-            System.out.println("Number Of Shares : " + companyShare.getNumberOfShares());
+            System.out.println("Stock Symbol : " + companyShare.getData().getStockSymbol());
+            System.out.println("Number Of Shares : " + companyShare.getData().getNumberOfShares());
             System.out.println();
             count++;
         }
@@ -64,7 +67,7 @@ public class StockAccountManagement {
 
         System.out.println("Enter the amount to sell");
         int amount = in.nextInt();
-        CompanyShares selectedStock = account.getCompanyShares().get(choice - 1);
+        CompanyShares selectedStock = account.getCompanyShares().get(choice - 1).getData();
         while (amount > (long) selectedStock.getNumberOfShares() || amount<=0)
         {
             System.out.println("Enter a valid amount");
