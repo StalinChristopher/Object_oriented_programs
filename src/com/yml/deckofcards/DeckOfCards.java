@@ -1,15 +1,24 @@
 package com.yml.deckofcards;
 
+import com.yml.linkedlist.Node;
+import com.yml.queue.Queue;
+
 public class DeckOfCards {
 	public static void deckOfCards() {
-		
-		//Creating a new object of class Deck
 		Deck deck = new Deck();
+        deck.initialize();
+		Queue<Player> players = new Queue<Player>();
 		
-		//Calling the shuffle method from Deck class and storing the return value in 2d array of type String
-		String playersArray[][] = deck.shuffle();
-		
-		//Printing the obtained 2d array
-		deck.print2dArray(playersArray);
+		int noOfPlayers = 4;
+        for(int i = 0 ; i<noOfPlayers; i++) {
+            players.enqueue(new Player());
+        }
+
+        deck.shuffle(players);
+        for (Node<Player> player : players) {
+            player.getData().sortBasedOnRank();
+        }
+
+        deck.printCards(players);
 	}
 }
