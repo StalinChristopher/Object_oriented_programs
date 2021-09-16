@@ -13,11 +13,11 @@ public class ObjectOrientedPrograms {
 		
 //		InventoryManager.inventoryManager();
 		
-//		DeckOfCards.deckOfCards();
+		DeckOfCards.deckOfCards();
 		
 //		StockManagement.stockManagement();
 		
-		StockAccountManagement.stockManagement();
+//		StockAccountManagement.stockManagement();
 
 	}
 

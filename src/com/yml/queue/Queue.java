@@ -6,13 +6,31 @@ import com.yml.linkedlist.Node;
 public class Queue<T> implements Iterable<Node<T>> {
     Node<T> front;
     Node<T> rear;
+    int size;
 
     public Queue() {
         front = null;
         rear = front;
+        size = 0;
     }
 
-    public void enqueue(T data) {
+    public Node<T> getFront() {
+		return front;
+	}
+
+	public void setFront(Node<T> front) {
+		this.front = front;
+	}
+
+	public Node<T> getRear() {
+		return rear;
+	}
+
+	public void setRear(Node<T> rear) {
+		this.rear = rear;
+	}
+
+	public void enqueue(T data) {
         Node<T> newNode = new Node<T>(data);
 
         if (rear == null) {
@@ -22,6 +40,7 @@ public class Queue<T> implements Iterable<Node<T>> {
             rear.setNext(newNode);
             rear = newNode;
         }
+        size++;
 
     }
 
@@ -40,8 +59,12 @@ public class Queue<T> implements Iterable<Node<T>> {
             dequed = front.getData();
             front = front.getNext();
         }
-
+        size--;
         return dequed;
+    }
+    
+    public int size() {
+    	return size;
     }
 
     @Override

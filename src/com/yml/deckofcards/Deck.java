@@ -1,5 +1,7 @@
 package com.yml.deckofcards;
 import java.util.*;
+import com.yml.queue.Queue;
+import com.yml.linkedlist.Node;
 
 /**
  * @author Stalin Christopher
@@ -13,19 +15,22 @@ public class Deck {
 	Set<Integer> cardNumber = new HashSet<Integer>();
 	String suit[] = {"Clubs", "Diamonds", "Hearts", "Spades"};
 	String rank[] = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
-	String cards[] = new String[53];
+	Card card[] = new Card[52];
 	Deck() {
-		this.initialize();
 	}
 	
 	/**
-	 * @method to initialise the cards and it is called inside the constructor
+	 * @method to initialise the card object
 	 */
 	public void initialize() {
+		for(int i = 0; i< 52; i++) {
+			card[i] = new Card();
+		}
 		int count =0;
 		for(int i = 0; i < 4; i++) {
 			for(int j = 0; j<13; j++) {
-				cards[count] = suit[i]+""+rank[j];
+				card[count].setSuit(suit[i]);
+				card[count].setRank(rank[j]);
 				count ++;
 			}
 		}
@@ -36,38 +41,38 @@ public class Deck {
 	 */
 	public int generateRandomNumber() {
 		
-		int randomNumber = random.nextInt(53);
+		int randomNumber = random.nextInt(52);
 		while(cardNumber.contains(randomNumber)) {
-			randomNumber = random.nextInt(53);
+			randomNumber = random.nextInt(52);
 		}
 		cardNumber.add(randomNumber);
 		return randomNumber;
 	}
 	
 	/**
-	 * @method it returns a 2d array where each row is the player and each column is the respective card of the players
-	 * 		   Each player will have 9 unique cards and there are a total of 4 players
+	 * @method generates 9 unique cards for the players present in the queue using generateRandomNumber() method
+	 * 		   
 	 */
-	public String[][] shuffle() {
-		String[][] playersArray = new String[4][9];
-		for(int i = 0; i < 4; i++) {
-			for(int j = 0 ; j < 9; j++) {
+	public void shuffle(Queue<Player> players) {
+		for (Node<Player> player : players) {
+			for(int i =0; i < 9; i++) {
 				int randomNumber = generateRandomNumber();
-				playersArray[i][j] = cards[randomNumber];
+				player.getData().addCard(card[randomNumber]);
 			}
 		}
-		return playersArray;
 	}
 	
 	/**
 	 * @method to print the given 2d array as the parameter
 	 */
-	public void print2dArray(String[][] playersArray) {
-		for(int i=0; i<4; i++) {
-			System.out.print("Player "+(i+1)+" : ");
-			for(int j = 0 ; j < 9; j++) {
-				System.out.print(playersArray[i][j]+"     ");
+	public void printCards(Queue<Player> players) {
+		int count = 1;
+		for(Node<Player> player : players) {
+			System.out.print("Player "+count+" : \n");
+			for (Node<Card> card : player.getData().getDeckOfCards()) {
+				System.out.println(card.getData() + " ");
 			}
+			count++;
 			System.out.println();
 		}
 	}
